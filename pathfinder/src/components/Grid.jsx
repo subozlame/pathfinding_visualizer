@@ -7,7 +7,7 @@ function Grid({
   onMouseUp,
 }) {
   return (
-    <div className="inline-block">
+    <div className="inline-block w-full overflow-auto flex justify-center p-2">
       {grid.map((row, rowIndex) => (
         <div
           key={rowIndex}

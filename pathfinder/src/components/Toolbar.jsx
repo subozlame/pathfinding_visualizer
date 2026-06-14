@@ -10,48 +10,55 @@ function Toolbar({
   loadGrid,
 }) {
   return (
-    <div className="flex flex-wrap gap-3 justify-center mb-4 text-white">
+    <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 text-white">
 
       <button
         onClick={runDijkstra}
-        className="bg-blue-600 px-3 py-2 rounded"
+       className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         Dijkstra
       </button>
 
       <button
         onClick={runAStar}
-        className="bg-purple-600 px-3 py-2 rounded"
+        className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         A*
       </button>
 
       <button
         onClick={generateMaze}
-        className="bg-green-600 px-3 py-2 rounded"
+        className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         Maze
       </button>
 
       <button
         onClick={resetGrid}
-        className="bg-red-600 px-3 py-2 rounded"
+        className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         Reset
       </button>
 
       <button
         onClick={saveGrid}
-        className="bg-yellow-600 px-3 py-2 rounded"
+        className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         Save
       </button>
 
       <button
         onClick={loadGrid}
-        className="bg-indigo-600 px-3 py-2 rounded"
+       className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
         Load
+      </button>
+
+      <button
+        onClick={pause}
+        className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
+      >
+        Pause
       </button>
 
       <div className="flex items-center gap-2 ml-4">

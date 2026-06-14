@@ -267,14 +267,14 @@ function runAStar() {
   });
 }
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
 
-      <h1 className="text-center text-4xl font-bold py-6">
+      <h1 className="text-center text-2xl md:text-4xl font-bold py-4 md:py-6">
         Pathfinding Visualizer
       </h1>
 
-      <div className="flex justify-center overflow-auto px-4">
-<Toolbar
+      <div className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md p-2 md:p-3 border-b border-slate-700 overflow-x-auto">
+      <Toolbar
   runDijkstra={runDijkstra}
   runAStar={runAStar}
   pause={pause}
@@ -285,24 +285,26 @@ function runAStar() {
   saveGrid={handleSave}
   loadGrid={handleLoad}
 />
+      </div>
 
-
-<Grid
+      <div className="flex-1 flex flex-col items-center justify-center px-2 md:px-4 py-4">
+        <Grid
   grid={grid}
   onMouseDown={handleMouseDown}
   onMouseEnter={handleMouseEnter}
   onMouseUp={handleMouseUp}
 />
+      </div>
 
-<Metrics
+      <div className="sticky bottom-0 z-50 bg-slate-900/90 backdrop-blur-md p-2 md:p-3 border-t border-slate-700">
+        <Metrics
   visitedCount={metrics.visited}
   pathLength={metrics.path}
   time={metrics.time}
 />
-
       </div>
 
-      <div className="text-center mt-6">
+      <div className="text-center py-4 md:py-6 px-2 text-sm md:text-base">
 
         <p>
           Green = Start

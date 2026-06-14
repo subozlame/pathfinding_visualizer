@@ -4,7 +4,7 @@ function Metrics({
   time,
 }) {
   return (
-    <div className="flex gap-6 justify-center mt-4 text-white">
+    <div className="flex flex-wrap justify-center gap-3 text-xs sm:text-sm mt-3">
       <div>
         Visited:{" "}
         <span className="text-blue-400">

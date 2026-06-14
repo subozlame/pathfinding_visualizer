@@ -6,7 +6,7 @@ function Node({
   onMouseUp,
 }) {
   let classes =
-  "w-7 h-7 border border-slate-700";
+  "w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border border-slate-700";
 
 if (node.isStart)
   classes += " bg-green-500";
