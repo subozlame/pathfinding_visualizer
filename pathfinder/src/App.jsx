@@ -51,8 +51,10 @@ function App() {
   play,
   pause,
   resume,
+  wait,
   speed,
   setSpeed,
+  isPaused,
 } = useAnimation();
 
 const renderRef = useRef(false);
@@ -225,6 +227,8 @@ function resetNodes() {
   return newGrid;
 }
 async function runDijkstra() {
+  const startTime = performance.now();
+
   const freshGrid = resetNodes();
 
   const start = freshGrid.flat().find(n => n.isStart);
@@ -232,6 +236,8 @@ async function runDijkstra() {
 
   const visitedNodes = dijkstra(freshGrid, start, end);
   const pathNodes = getShortestPath(end);
+  const endTime = performance.now();
+  const searchTime = Math.round(endTime - startTime);
 
   // 1. Animate VISITED nodes first
   for (let i = 0; i < visitedNodes.length; i++) {
@@ -239,9 +245,9 @@ async function runDijkstra() {
 
     node.visited = true;
 
-    setGrid(prev => [...prev]);
+    setGrid([...freshGrid]);
 
-    await new Promise(r => setTimeout(r, speed));
+    await wait(speed);
   }
 
   // 2. Animate SHORTEST PATH second
@@ -250,10 +256,16 @@ async function runDijkstra() {
 
     node.isPath = true;
 
-    setGrid(prev => [...prev]);
+    setGrid([...freshGrid]);
 
-    await new Promise(r => setTimeout(r, 60));
+    await wait(60);
   }
+
+  setMetrics({
+    visited: visitedNodes.length,
+    path: pathNodes.length,
+    time: searchTime,
+  });
 }
 
 function runAStar() {
@@ -267,32 +279,28 @@ function runAStar() {
   const visitedNodes = astar(freshGrid, start, end);
 
   const path = getShortestPath(end);
+  const endTime = performance.now();
+  const searchTime = Math.round(endTime - startTime);
 
   play({
     visitedNodes,
     onVisit: (node) => {
       node.visited = true;
-      setGrid([...freshGrid]);
-    },
-    onVisit: (node) => {
-  node.visited = true;
   triggerRender([...freshGrid]);
 },
     onFinish:async () => {
   for (const node of path) {
     node.isPath = true;
     setGrid([...freshGrid]);
-    await new Promise(r => setTimeout(r, 80));
+    await wait(80);
       }
 
       setGrid([...freshGrid]);
 
-      const endTime = performance.now();
-
       setMetrics({
         visited: visitedNodes.length,
         path: path.length,
-        time: Math.round(endTime - startTime),
+        time: searchTime,
       });
     },
   });
@@ -309,6 +317,8 @@ function runAStar() {
   runDijkstra={runDijkstra}
   runAStar={runAStar}
   pause={pause}
+  resume={resume}
+  isPaused={isPaused}
   speed={speed}
   setSpeed={setSpeed}
   generateMaze={handleGenerateMaze}

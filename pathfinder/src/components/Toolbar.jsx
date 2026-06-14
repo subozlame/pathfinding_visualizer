@@ -2,6 +2,8 @@ function Toolbar({
   runDijkstra,
   runAStar,
   pause,
+  resume,
+  isPaused,
   speed,
   setSpeed,
   generateMaze,
@@ -55,10 +57,10 @@ function Toolbar({
       </button>
 
       <button
-        onClick={pause}
+        onClick={isPaused ? resume : pause}
         className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded"
       >
-        Pause
+        {isPaused ? "Resume" : "Pause"}
       </button>
 
       <div className="flex items-center gap-2 ml-4">

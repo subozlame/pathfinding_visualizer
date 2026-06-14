@@ -20,7 +20,7 @@ function Metrics({
       </div>
 
       <div>
-        Time:{" "}
+            Algorithm Time:{" "}
         <span className="text-green-400">
           {time} ms
         </span>

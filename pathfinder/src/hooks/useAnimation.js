@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 export default function useAnimation() {
   const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(30);
 
   const indexRef = useRef(0);
@@ -12,6 +13,22 @@ export default function useAnimation() {
     return new Promise((r) => setTimeout(r, ms));
   }
 
+  async function wait(ms) {
+    let remaining = ms;
+
+    while (remaining > 0) {
+      if (pausedRef.current) {
+        await sleep(25);
+        continue;
+      }
+
+      const chunk = Math.min(25, remaining);
+
+      await sleep(chunk);
+      remaining -= chunk;
+    }
+  }
+
   function clear() {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -20,11 +37,13 @@ export default function useAnimation() {
 
   function pause() {
     pausedRef.current = true;
+    setIsPaused(true);
     setIsRunning(false);
   }
 
   function resume() {
     pausedRef.current = false;
+    setIsPaused(false);
   }
 
   async function play({
@@ -34,6 +53,7 @@ export default function useAnimation() {
   }) {
     setIsRunning(true);
     pausedRef.current = false;
+    setIsPaused(false);
 
     for (
       indexRef.current = 0;
@@ -51,7 +71,7 @@ export default function useAnimation() {
       onVisit(node);
 
       // Smooth delay controlled by speed
-      await sleep(50 + speed * 2);
+      await wait(50 + speed * 2);
     }
 
     setIsRunning(false);
@@ -61,6 +81,7 @@ export default function useAnimation() {
   function reset() {
     pausedRef.current = true;
     indexRef.current = 0;
+    setIsPaused(false);
     setIsRunning(false);
   }
 
@@ -68,8 +89,10 @@ export default function useAnimation() {
     play,
     pause,
     resume,
+    wait,
     reset,
     isRunning,
+    isPaused,
     speed,
     setSpeed,
   };
