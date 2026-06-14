@@ -1,4 +1,9 @@
 import { useState } from "react";
+import useAnimation from "./hooks/useAnimation";
+
+import Toolbar from "./components/Toolbar";
+import Metrics from "./components/Metrics";
+
 import Grid from "./components/Grid";
 import { createGrid } from "./utils/createGrid";
 import {dijkstra} from "./algorithms/dijkstra";
