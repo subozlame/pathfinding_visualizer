@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAnimation from "./hooks/useAnimation";
-import { useRef } from "react";
 
 import Toolbar from "./components/Toolbar";
 import Metrics from "./components/Metrics";
@@ -9,12 +8,44 @@ import { generateMaze } from "./utils/mazeGenerator";
 import { saveGrid, loadGrid } from "./utils/localStorage";
 
 import Grid from "./components/Grid";
-import { createGrid } from "./utils/createGrid";
+import { COLS, ROWS, createGrid } from "./utils/createGrid";
 import {dijkstra} from "./algorithms/dijkstra";
 import {astar} from "./algorithms/astar";
 import { getShortestPath } from "./utils/getShortestPath";
 
 function App() {
+
+  const [cellSize, setCellSize] = useState(24);
+
+  useEffect(() => {
+    function updateCellSize() {
+      const horizontalPadding = 32;
+      const reservedHeight = 240;
+
+      const maxByWidth = Math.floor(
+        (window.innerWidth - horizontalPadding) / COLS
+      );
+
+      const maxByHeight = Math.floor(
+        (window.innerHeight - reservedHeight) / ROWS
+      );
+
+      const nextSize = Math.max(
+        8,
+        Math.min(24, maxByWidth, maxByHeight)
+      );
+
+      setCellSize(nextSize);
+    }
+
+    updateCellSize();
+
+    window.addEventListener("resize", updateCellSize);
+
+    return () => {
+      window.removeEventListener("resize", updateCellSize);
+    };
+  }, []);
 
   const {
   play,
@@ -289,11 +320,12 @@ function runAStar() {
 
       <div className="flex-1 flex flex-col items-center justify-center px-2 md:px-4 py-4">
         <Grid
-  grid={grid}
-  onMouseDown={handleMouseDown}
-  onMouseEnter={handleMouseEnter}
-  onMouseUp={handleMouseUp}
-/>
+          grid={grid}
+          cellSize={cellSize}
+          onMouseDown={handleMouseDown}
+          onMouseEnter={handleMouseEnter}
+          onMouseUp={handleMouseUp}
+        />
       </div>
 
       <div className="sticky bottom-0 z-50 bg-slate-900/90 backdrop-blur-md p-2 md:p-3 border-t border-slate-700">

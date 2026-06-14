@@ -1,12 +1,12 @@
 
 function Node({
   node,
+  cellSize,
   onMouseDown,
   onMouseEnter,
   onMouseUp,
 }) {
-  let classes =
-  "w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border border-slate-700";
+  let classes = "border border-slate-700 shrink-0";
 
 if (node.isStart)
   classes += " bg-green-500";
@@ -29,6 +29,10 @@ else
   return (
     <div
       className={classes}
+      style={{
+        width: cellSize,
+        height: cellSize,
+      }}
       onMouseDown={() =>
         onMouseDown(node)
       }
@@ -38,33 +42,5 @@ else
       onMouseUp={onMouseUp}
     />
   );
-}
-function resetNodes() {
-  const newGrid = [...grid];
-
-  for (const row of newGrid) {
-    for (const node of row) {
-
-      node.visited = false;
-
-      node.isPath = false;
-
-      node.distance =
-        Infinity;
-
-      node.g = Infinity;
-
-      node.h = 0;
-
-      node.f = Infinity;
-
-      node.previous =
-        null;
-    }
-  }
-
-  setGrid(newGrid);
-
-  return newGrid;
 }
 export default Node;
