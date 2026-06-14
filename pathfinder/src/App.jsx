@@ -11,6 +11,21 @@ import {astar} from "./algorithms/astar";
 import { getShortestPath } from "./utils/getShortestPath";
 
 function App() {
+
+  const {
+  play,
+  pause,
+  speed,
+  setAnimationSpeed,
+} = useAnimation();
+
+
+const [metrics, setMetrics] = useState({
+  visited: 0,
+  path: 0,
+  time: 0,
+});
+
   const [grid, setGrid] =
     useState(createGrid());
 
