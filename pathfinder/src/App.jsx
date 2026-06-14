@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAnimation from "./hooks/useAnimation";
+import { useRef } from "react";
 
 import Toolbar from "./components/Toolbar";
 import Metrics from "./components/Metrics";
@@ -23,6 +24,18 @@ function App() {
   setSpeed,
 } = useAnimation();
 
+const renderRef = useRef(false);
+
+function triggerRender(gridCopy) {
+  if (renderRef.current) return;
+
+  renderRef.current = true;
+
+  requestAnimationFrame(() => {
+    setGrid([...gridCopy]);
+    renderRef.current = false;
+  });
+}
 
 const [metrics, setMetrics] = useState({
   visited: 0,
@@ -194,12 +207,14 @@ function runDijkstra() {
     visitedNodes,
     onVisit: (node) => {
       node.visited = true;
-      setGrid([...freshGrid]);
+      triggerRender([...freshGrid]);
     },
-    onFinish: () => {
-      for (const node of path) {
-        node.isPath = true;
-      }
+onFinish: async () => {
+  for (const node of path) {
+    node.isPath = true;
+    setGrid([...freshGrid]);
+    await new Promise(r => setTimeout(r, 80));
+  }
 
       setGrid([...freshGrid]);
 
@@ -232,9 +247,15 @@ function runAStar() {
       node.visited = true;
       setGrid([...freshGrid]);
     },
-    onFinish: () => {
-      for (const node of path) {
-        node.isPath = true;
+    onVisit: (node) => {
+  node.visited = true;
+  triggerRender([...freshGrid]);
+},
+    onFinish:async () => {
+  for (const node of path) {
+    node.isPath = true;
+    setGrid([...freshGrid]);
+    await new Promise(r => setTimeout(r, 80));
       }
 
       setGrid([...freshGrid]);
