@@ -18,8 +18,9 @@ function App() {
   const {
   play,
   pause,
+  resume,
   speed,
-  setAnimationSpeed,
+  setSpeed,
 } = useAnimation();
 
 
@@ -261,7 +262,7 @@ function runAStar() {
   runAStar={runAStar}
   pause={pause}
   speed={speed}
-  setSpeed={setAnimationSpeed}
+  setSpeed={setSpeed}
   generateMaze={handleGenerateMaze}
   resetGrid={resetGrid}
   saveGrid={handleSave}
