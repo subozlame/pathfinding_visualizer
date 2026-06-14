@@ -1,0 +1,18 @@
+reacticons
+react-icons is a popular library that provides a wide range of icons from various icon packs, including Font Awesome, Material Design, and more. It allows you to easily use these icons in your React applications.
+To install react-icons, you can use npm or yarn:
+Using npm:
+npm install react-icons
+Using yarn:
+yarn add react-icons
+After installing, you can import and use the icons in your React components. For example:
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+function SocialMediaIcons() {
+  return (
+    <div>
+      <FaGithub size={30} />
+      <FaLinkedin size={30} />
+    </div>
+  );
+}
+
