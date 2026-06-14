@@ -188,24 +188,40 @@ function runDijkstra() {
   });
 }
 
-function visualizeAstar() {
+function runAStar() {
+  const startTime = performance.now();
+
   const freshGrid = resetNodes();
 
   const start = freshGrid.flat().find(n => n.isStart);
   const end = freshGrid.flat().find(n => n.isEnd);
 
-  const visited = astar(freshGrid, start, end);
+  const visitedNodes = astar(freshGrid, start, end);
+
   const path = getShortestPath(end);
 
-  for (const node of visited) {
-    node.visited = true;
-  }
+  play({
+    visitedNodes,
+    onVisit: (node) => {
+      node.visited = true;
+      setGrid([...freshGrid]);
+    },
+    onFinish: () => {
+      for (const node of path) {
+        node.isPath = true;
+      }
 
-  for (const node of path) {
-    node.isPath = true;
-  }
+      setGrid([...freshGrid]);
 
-  setGrid([...freshGrid]);
+      const endTime = performance.now();
+
+      setMetrics({
+        visited: visitedNodes.length,
+        path: path.length,
+        time: Math.round(endTime - startTime),
+      });
+    },
+  });
 }
   return (
     <div className="min-h-screen bg-slate-950 text-white">
