@@ -4,6 +4,9 @@ import useAnimation from "./hooks/useAnimation";
 import Toolbar from "./components/Toolbar";
 import Metrics from "./components/Metrics";
 
+import { generateMaze } from "./utils/mazeGenerator";
+import { saveGrid, loadGrid } from "./utils/localStorage";
+
 import Grid from "./components/Grid";
 import { createGrid } from "./utils/createGrid";
 import {dijkstra} from "./algorithms/dijkstra";
@@ -126,6 +129,28 @@ const [metrics, setMetrics] = useState({
     setDraggingEnd(false);
   };
 
+function handleGenerateMaze() {
+  const newGrid = generateMaze(grid);
+  setGrid([...newGrid]);
+}
+
+function resetGrid() {
+  const fresh = createGrid();
+  setGrid(fresh);
+}
+
+function handleSave() {
+  saveGrid(grid);
+}
+
+function handleLoad() {
+  const data = loadGrid();
+
+  if (data) {
+    setGrid(data);
+  }
+}
+
 function getStartNode() {
   return grid.flat().find(node => node.isStart);
 }
@@ -237,7 +262,12 @@ function runAStar() {
   pause={pause}
   speed={speed}
   setSpeed={setAnimationSpeed}
+  generateMaze={handleGenerateMaze}
+  resetGrid={resetGrid}
+  saveGrid={handleSave}
+  loadGrid={handleLoad}
 />
+
 
 <Grid
   grid={grid}
