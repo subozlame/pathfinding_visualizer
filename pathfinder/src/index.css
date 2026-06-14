@@ -5,3 +5,27 @@ html,body {
   overflow-x:hidden;
   background: #0f172a;
 }
+
+@keyframes bubblePop {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.75);
+  }
+
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+    box-shadow: 0 0 0 10px rgba(56, 189, 248, 0.18);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+  }
+}
+
+.bubble-visited {
+  animation: bubblePop 360ms ease-out both;
+}

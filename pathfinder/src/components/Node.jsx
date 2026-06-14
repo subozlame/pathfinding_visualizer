@@ -21,7 +21,7 @@ else if (node.isPath)
   classes += " bg-yellow-400";
 
 else if (node.visited)
-  classes += " bg-sky-400";
+  classes += " bg-sky-400 bubble-visited";
 
 else
   classes += " bg-white";
@@ -32,6 +32,16 @@ else
       style={{
         width: cellSize,
         height: cellSize,
+        animationDelay: node.visited
+          ? `${Math.min(
+              node.distance !== Infinity
+                ? node.distance
+                : node.g !== Infinity
+                  ? node.g
+                  : 0,
+              40
+            ) * 12}ms`
+          : undefined,
       }}
       onMouseDown={() =>
         onMouseDown(node)

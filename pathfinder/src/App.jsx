@@ -15,6 +15,9 @@ import { getShortestPath } from "./utils/getShortestPath";
 
 function App() {
 
+  const [statusMessage, setStatusMessage] = useState("");
+  const statusTimerRef = useRef(null);
+
   const [cellSize, setCellSize] = useState(24);
 
   useEffect(() => {
@@ -58,6 +61,19 @@ function App() {
 } = useAnimation();
 
 const renderRef = useRef(false);
+
+function showStatusMessage(message) {
+  setStatusMessage(message);
+
+  if (statusTimerRef.current) {
+    clearTimeout(statusTimerRef.current);
+  }
+
+  statusTimerRef.current = setTimeout(() => {
+    setStatusMessage("");
+    statusTimerRef.current = null;
+  }, 2600);
+}
 
 function triggerRender(gridCopy) {
   if (renderRef.current) return;
@@ -235,7 +251,7 @@ async function runDijkstra() {
   const end = freshGrid.flat().find(n => n.isEnd);
 
   const visitedNodes = dijkstra(freshGrid, start, end);
-  const pathNodes = getShortestPath(end);
+  const pathNodes = getShortestPath(end, start);
   const endTime = performance.now();
   const searchTime = Math.round(endTime - startTime);
 
@@ -261,6 +277,10 @@ async function runDijkstra() {
     await wait(60);
   }
 
+  if (!pathNodes.length) {
+    showStatusMessage("No path found. The end is blocked or unreachable.");
+  }
+
   setMetrics({
     visited: visitedNodes.length,
     path: pathNodes.length,
@@ -278,9 +298,13 @@ function runAStar() {
 
   const visitedNodes = astar(freshGrid, start, end);
 
-  const path = getShortestPath(end);
+  const path = getShortestPath(end, start);
   const endTime = performance.now();
   const searchTime = Math.round(endTime - startTime);
+
+  visitedNodes.forEach((node, index) => {
+    node.waveDistance = node.g;
+  });
 
   play({
     visitedNodes,
@@ -296,6 +320,10 @@ function runAStar() {
       }
 
       setGrid([...freshGrid]);
+
+      if (!path.length) {
+        showStatusMessage("No path found. The end is blocked or unreachable.");
+      }
 
       setMetrics({
         visited: visitedNodes.length,
@@ -327,6 +355,12 @@ function runAStar() {
   loadGrid={handleLoad}
 />
       </div>
+
+      {statusMessage ? (
+        <div className="mx-auto mt-3 rounded-md border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-200">
+          {statusMessage}
+        </div>
+      ) : null}
 
       <div className="flex-1 flex flex-col items-center justify-center px-2 md:px-4 py-4">
         <Grid
