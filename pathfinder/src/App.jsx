@@ -231,17 +231,26 @@ function runAStar() {
       </h1>
 
       <div className="flex justify-center overflow-auto px-4">
+<Toolbar
+  runDijkstra={runDijkstra}
+  runAStar={runAStar}
+  pause={pause}
+  speed={speed}
+  setSpeed={setAnimationSpeed}
+/>
 
-        <Grid
-          grid={grid}
-          onMouseDown={
-            handleMouseDown
-          }
-          onMouseEnter={
-            handleMouseEnter
-          }
-          onMouseUp={handleMouseUp}
-        />
+<Grid
+  grid={grid}
+  onMouseDown={handleMouseDown}
+  onMouseEnter={handleMouseEnter}
+  onMouseUp={handleMouseUp}
+/>
+
+<Metrics
+  visitedCount={metrics.visited}
+  pathLength={metrics.path}
+  time={metrics.time}
+/>
 
       </div>
 
