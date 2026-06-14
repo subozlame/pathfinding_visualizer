@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import useAnimation from "./hooks/useAnimation";
-
+import {
+  FaGithub,
+  FaLinkedin,
+  FaInstagram,
+  FaFacebook,
+} from "react-icons/fa";
 import Toolbar from "./components/Toolbar";
 import Metrics from "./components/Metrics";
 
@@ -396,6 +401,53 @@ function runAStar() {
 
       </div>
 
+      <footer className="border-t border-slate-700 px-2 py-4 md:py-6 text-sm md:text-base">
+        <div className="flex items-center justify-center gap-5 mb-3 text-xl md:text-2xl">
+          <a
+            href="https://www.facebook.com/subodh.madai"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Facebook"
+            className="text-slate-300 transition-transform duration-200 hover:-translate-y-1 hover:text-blue-400"
+          >
+            <FaFacebook />
+          </a>
+
+          <a
+            href="https://github.com/subozlame"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            className="text-slate-300 transition-transform duration-200 hover:-translate-y-1 hover:text-white"
+          >
+            <FaGithub />
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/subodh-madai"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+            className="text-slate-300 transition-transform duration-200 hover:-translate-y-1 hover:text-sky-400"
+          >
+            <FaLinkedin />
+          </a>
+
+          <a
+            href="https://www.instagram.com/poppypliers"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Instagram"
+            className="text-slate-300 transition-transform duration-200 hover:-translate-y-1 hover:text-pink-400"
+          >
+            <FaInstagram />
+          </a>
+        </div>
+
+        <p className="text-center text-slate-400">
+          © 2026 Subodh Madai All Rights Reserved
+        </p>
+      </footer>
     </div>
   );
 }
