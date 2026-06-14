@@ -174,59 +174,55 @@ function getEndNode() {
 }
 
 function resetNodes() {
-  const newGrid = [...grid];
+  const newGrid = grid.map(row =>
+    row.map(node => ({
+      ...node,
 
-  for (const row of newGrid) {
-    for (const node of row) {
-      node.visited = false;
-      node.isPath = false;
-      node.distance = Infinity;
-      node.g = Infinity;
-      node.h = 0;
-      node.f = Infinity;
-      node.previous = null;
-    }
-  }
+      visited: false,
+      isPath: false,
+
+      distance: Infinity,
+      previous: null,
+
+      g: Infinity,
+      h: 0,
+      f: Infinity,
+    }))
+  );
 
   setGrid(newGrid);
   return newGrid;
 }
-function runDijkstra() {
-  const startTime = performance.now();
-
+async function runDijkstra() {
   const freshGrid = resetNodes();
 
   const start = freshGrid.flat().find(n => n.isStart);
   const end = freshGrid.flat().find(n => n.isEnd);
 
   const visitedNodes = dijkstra(freshGrid, start, end);
+  const pathNodes = getShortestPath(end);
 
-  const path = getShortestPath(end);
+  // 1. Animate VISITED nodes first
+  for (let i = 0; i < visitedNodes.length; i++) {
+    const node = visitedNodes[i];
 
-  play({
-    visitedNodes,
-    onVisit: (node) => {
-      node.visited = true;
-      triggerRender([...freshGrid]);
-    },
-onFinish: async () => {
-  for (const node of path) {
-    node.isPath = true;
-    setGrid([...freshGrid]);
-    await new Promise(r => setTimeout(r, 80));
+    node.visited = true;
+
+    setGrid(prev => [...prev]);
+
+    await new Promise(r => setTimeout(r, speed));
   }
 
-      setGrid([...freshGrid]);
+  // 2. Animate SHORTEST PATH second
+  for (let i = 0; i < pathNodes.length; i++) {
+    const node = pathNodes[i];
 
-      const endTime = performance.now();
+    node.isPath = true;
 
-      setMetrics({
-        visited: visitedNodes.length,
-        path: path.length,
-        time: Math.round(endTime - startTime),
-      });
-    },
-  });
+    setGrid(prev => [...prev]);
+
+    await new Promise(r => setTimeout(r, 60));
+  }
 }
 
 function runAStar() {
