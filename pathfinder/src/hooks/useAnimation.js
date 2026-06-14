@@ -2,67 +2,75 @@ import { useRef, useState } from "react";
 
 export default function useAnimation() {
   const [isRunning, setIsRunning] = useState(false);
-  const [speed, setSpeed] = useState(20);
+  const [speed, setSpeed] = useState(30);
 
-  const timeoutRef = useRef(null);
   const indexRef = useRef(0);
+  const pausedRef = useRef(false);
+  const rafRef = useRef(null);
+
+  function sleep(ms) {
+    return new Promise((r) => setTimeout(r, ms));
+  }
 
   function clear() {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
     }
   }
 
-  function play({
+  function pause() {
+    pausedRef.current = true;
+    setIsRunning(false);
+  }
+
+  function resume() {
+    pausedRef.current = false;
+  }
+
+  async function play({
     visitedNodes,
     onVisit,
     onFinish,
   }) {
     setIsRunning(true);
+    pausedRef.current = false;
 
-    function step() {
-      if (indexRef.current >= visitedNodes.length) {
+    for (
+      indexRef.current = 0;
+      indexRef.current < visitedNodes.length;
+      indexRef.current++
+    ) {
+      if (pausedRef.current) {
         setIsRunning(false);
-        onFinish?.();
         return;
       }
 
-      const node = visitedNodes[indexRef.current];
+      const node =
+        visitedNodes[indexRef.current];
 
       onVisit(node);
 
-      indexRef.current++;
-
-      timeoutRef.current = setTimeout(
-        step,
-        speed
-      );
+      // Smooth delay controlled by speed
+      await sleep(50 + speed * 2);
     }
 
-    step();
-  }
-
-  function pause() {
-    clear();
     setIsRunning(false);
+    onFinish?.();
   }
 
   function reset() {
-    clear();
+    pausedRef.current = true;
     indexRef.current = 0;
     setIsRunning(false);
-  }
-
-  function setAnimationSpeed(value) {
-    setSpeed(value);
   }
 
   return {
     play,
     pause,
+    resume,
     reset,
     isRunning,
     speed,
-    setAnimationSpeed,
+    setSpeed,
   };
 }
